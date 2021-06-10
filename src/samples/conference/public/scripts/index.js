@@ -104,6 +104,15 @@ const runSocketIOSample = function() {
             let $video = $(`<video controls autoplay id=${stream.id} style="display:block" >this browser does not supported video tag</video>`);
            $video.get(0).srcObject = stream.mediaStream;
            $p.append($video);
+
+            let $sphere = $(`<a-videosphere crossorigin="anonymous" autoplay src=#${stream.id} ></a-videosphere>`);
+            let $ascene = $(`<a-scene> </a-scene>`);
+            let $camera = $(`<a-camera><a-cursor></a-cursor></a-camera> `);
+
+            $ascene.append($camera);
+            $ascene.append($sphere);
+            $p.append($ascene);
+
         }, (err)=>{ console.log('subscribe failed', err);
         });
         stream.addEventListener('ended', () => {
@@ -171,8 +180,7 @@ const runSocketIOSample = function() {
                         }
                         mediaStream = stream;
                         localStream = new Owt.Base.LocalStream(
-                            mediaStream, new Owt.Base.StreamSourceInfo(
-                                'mic', 'camera'));
+                            mediaStream, new Owt.Base.StreamSourceInfo());
                         $('.local video').get(0).srcObject = stream;
                         conference.publish(localStream, publishOption).then(publication => {
                             publicationGlobal = publication;
